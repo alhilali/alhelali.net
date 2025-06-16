@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Saud Alhelali - Tech Enthusiast</title>
+    <!-- Google Fonts: IBM Plex Sans & IBM Plex Sans Arabic -->
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet" />
+    <!-- Shadcn/UI Theme Variables -->
+    <style>
+      @layer base {
+        :root {
+          --background: 0 0% 100%;
+          --foreground: 222.2 47.4% 11.2%;
+          --card: 0 0% 100%;
+          --card-foreground: 222.2 47.4% 11.2%;
+          --popover: 0 0% 100%;
+          --popover-foreground: 222.2 47.4% 11.2%;
+          --primary: 222.2 47.4% 11.2%;
+          --primary-foreground: 210 40% 98%;
+          --secondary: 210 40% 96.1%;
+          --secondary-foreground: 215.4 16.3% 46.9%;
+          --muted: 210 40% 96.1%;
+          --muted-foreground: 215.4 16.3% 46.9%;
+          --accent: 222.2 47.4% 11.2%;
+          --accent-foreground: 210 40% 98%;
+          --border: 0 0% 90%;
+          --input: 0 0% 89.8%;
+          --ring: 0 0% 3.9%;
+          --radius: 8px;
+        }
+        [data-theme='dark'] {
+          --background: 240 10% 3.9%;
+          --foreground: 0 0% 98%;
+          --card: 240 10% 3.9%;
+          --card-foreground: 0 0% 98%;
+          --popover: 240 10% 3.9%;
+          --popover-foreground: 0 0% 98%;
+          --primary: 0 0% 98%;
+          --primary-foreground: 240 5.9% 10%;
+          --secondary: 240 3.7% 15.9%;
+          --secondary-foreground: 0 0% 98%;
+          --muted: 240 3.7% 15.9%;
+          --muted-foreground: 240 5% 64.9%;
+          --accent: 0 0% 98%;
+          --accent-foreground: 240 5.9% 10%;
+          --border: 240 3.7% 15.9%;
+          --input: 240 3.7% 15.9%;
+          --ring: 240 4.9% 83.9%;
+        }
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background-color: hsl(var(--background));
+        color: hsl(var(--foreground));
+        font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
+        line-height: 1.6;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      /* Use Arabic font when page language is Arabic */
+      html[lang='ar'] body {
+        font-family: 'IBM Plex Sans Arabic', sans-serif;
+      }
+      header,
+      main,
+      footer {
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      header {
+        position: relative;
+        text-align: center;
+        padding: 2rem 1rem;
+        background: hsl(var(--card));
+      }
+      footer {
+        text-align: center;
+        padding: 1rem;
+        background: hsl(var(--card));
+      }
+      main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem;
+        background: hsl(var(--background));
+      }
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+      p.subtitle {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        color: hsl(var(--muted-foreground));
+      }
+      .toggle-btn,
+      .lang-btn {
+        position: absolute;
+        top: 1rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: hsl(var(--accent));
+        transition: background-color 0.2s ease;
+      }
+      .toggle-btn {
+        right: 1rem;
+      }
+      .lang-btn {
+        right: 3rem;
+        font-size: 0.9rem;
+        background-color: hsl(var(--card));
+      }
+      .toggle-btn:hover,
+      .lang-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .contact-buttons {
+        margin-top: 1rem;
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+      }
+      .btn {
+        background: hsl(var(--primary));
+        color: hsl(var(--primary-foreground));
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius);
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 0.9rem;
+        transition: opacity 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+      }
+      .btn:hover {
+        opacity: 0.8;
+      }
+      .code-container {
+        width: 100%;
+        max-width: 600px;
+        margin: 1rem 0;
+        display: flex;
+        flex-direction: column;
+      }
+      #code-input,
+      pre {
+        width: 100%;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        padding: 0.5rem;
+        border-radius: 4px;
+        background: hsl(var(--input));
+        color: hsl(var(--foreground));
+        border: 1px solid hsl(var(--border));
+        margin-top: 0.5rem;
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        direction: ltr;
+        unicode-bidi: embed;
+      }
+      pre {
+        overflow-x: auto;
+      }
+      @media (min-width: 600px) {
+        .code-container {
+          flex-direction: row;
+          gap: 1rem;
+        }
+        #code-input,
+        pre {
+          width: 50%;
+        }
+      }
+      footer p {
+        direction: ltr;
+        unicode-bidi: embed;
+      }
+    </style>
+    <!-- Highlight.js styles & script -->
+    <link id="hljs-style" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
+    </script>
+  </head>
+  <body>
+    <header>
+      <h1 id="heading">Hello, I'm Saud Alhelali</h1>
+      <p id="subtitle" class="subtitle">A tech enthusiast passionate about Web Development, AI, and Football. Welcome to my minimal corner of the internet.</p>
+      <button id="theme-toggle" class="toggle-btn" aria-label="Toggle theme"></button>
+      <button id="lang-toggle" class="lang-btn" aria-label="Toggle language"></button>
+      <div class="contact-buttons">
+        <a class="btn" href="mailto:saudalhilali@gmail.com">Email</a>
+        <a class="btn" href="https://www.linkedin.com/in/alhelali" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </header>
+    <main>
+      <section class="code-container">
+        <textarea id="code-input" placeholder="// Type JavaScript here...">console.log('Hello, world!');</textarea>
+        <pre><code id="code-output" class="javascript">console.log('Hello, world!');</code></pre>
+      </section>
+    </main>
+    <footer>
+      <p>&copy; 2025 Saud Alhelali</p>
+    </footer>
+
+    <!-- Theme & Language toggle script & interactive code highlighting -->
+    <script>
+      const htmlEl = document.documentElement;
+      const hljsStyle = document.getElementById('hljs-style');
+      const codeInput = document.getElementById('code-input');
+      const codeOutput = document.getElementById('code-output');
+      const headingEl = document.getElementById('heading');
+      const subtitleEl = document.getElementById('subtitle');
+      const themeToggle = document.getElementById('theme-toggle');
+      const langToggle = document.getElementById('lang-toggle');
+
+      const translations = {
+        en: {
+          heading: "Hello, I'm Saud Alhelali",
+          subtitle: 'A tech enthusiast passionate about Web Development, AI, and Football. Welcome to my minimal corner of the internet.',
+          langLabel: 'AR',
+        },
+        ar: {
+          heading: 'مرحبًا، أنا سعود الهلالي',
+          subtitle: 'شغوف بالتقنية وتطوير الويب، الذكاء الاصطناعي، وكرة القدم. نورت ركني البسيط على الإنترنت.',
+          langLabel: 'EN',
+        },
+      };
+
+      const sunIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="20" height="20"><path d="M12 3.25a.75.75 0 01.75.75v1a.75.75 0 01-1.5 0v-1a.75.75 0 01.75-.75zM17.658 6.342a.75.75 0 011.06 1.06l-.707.707a.75.75 0 01-1.06-1.06l.707-.707zM18.75 11.25a.75.75 0 010 1.5h-1a.75.75 0 010-1.5h1zM17.658 17.658a.75.75 0 11-1.06 1.06l-.707-.707a.75.75 0 111.06-1.06l.707.707zM12 18.75a.75.75 0 01.75.75v1a.75.75 0 01-1.5 0v-1a.75.75 0 01.75-.75zM6.342 17.658a.75.75 0 111.06-1.06l.707.707a.75.75 0 101.06-1.06l-.707-.707zM5.25 11.25a.75.75 0 010 1.5H4.25a.75.75 0 010-1.5h1zM6.342 6.342a.75.75 0 101.06-1.06l.707.707a.75.75 0 10-1.06 1.06l-.707-.707zM12 8.25a3.75 3.75 0 100 7.5 3.75 3.75 0 000-7.5z"/></svg>`;
+      const moonIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="20" height="20"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>`;
+
+      let currentTheme = localStorage.getItem('theme') || 'dark';
+      let currentLang = localStorage.getItem('lang') || 'en';
+
+      function updateTheme() {
+        htmlEl.setAttribute('data-theme', currentTheme);
+        hljsStyle.href =
+          currentTheme === 'dark'
+            ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css'
+            : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css';
+        themeToggle.innerHTML = currentTheme === 'dark' ? sunIcon : moonIcon;
+      }
+
+      function updateLang() {
+        langToggle.textContent = translations[currentLang].langLabel;
+        headingEl.textContent = translations[currentLang].heading;
+        subtitleEl.textContent = translations[currentLang].subtitle;
+        htmlEl.setAttribute('lang', currentLang);
+        htmlEl.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+      }
+
+      // Initialize
+      updateTheme();
+      updateLang();
+
+      // Event Listeners
+      themeToggle.addEventListener('click', () => {
+        currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('theme', currentTheme);
+        updateTheme();
+      });
+
+      langToggle.addEventListener('click', () => {
+        currentLang = currentLang === 'en' ? 'ar' : 'en';
+        localStorage.setItem('lang', currentLang);
+        updateLang();
+      });
+
+      codeInput.addEventListener('input', () => {
+        codeOutput.textContent = codeInput.value;
+        hljs.highlightElement(codeOutput);
+      });
+    </script>
+  </body>
+</html>
