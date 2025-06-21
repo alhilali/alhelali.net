@@ -222,7 +222,7 @@
       </section>
     </main> -->
     <footer>
-      <p>&copy; 2025 Saud Alhelali</p>
+      <p>&copy; <span id="current-year"></span> Saud Alhelali</p>
     </footer>
 
     <!-- Theme & Language toggle script & interactive code highlighting -->
@@ -235,6 +235,7 @@
       const subtitleEl = document.getElementById('subtitle');
       const themeToggle = document.getElementById('theme-toggle');
       const langToggle = document.getElementById('lang-toggle');
+      const currentYearEl = document.getElementById('current-year');
 
       const translations = {
         en: {
@@ -288,6 +289,9 @@
       // Initialize
       updateTheme();
       updateLang();
+
+      // Set current year
+      currentYearEl.textContent = new Date().getFullYear();
 
       // Event Listeners
       themeToggle.addEventListener('click', () => {
