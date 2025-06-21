@@ -3,6 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>Saud Alhelali - Tech Enthusiast</title>
     <!-- Google Fonts: IBM Plex Sans & IBM Plex Sans Arabic -->
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet" />
@@ -258,6 +262,19 @@
             ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css'
             : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css';
         themeToggle.innerHTML = currentTheme === 'dark' ? sunIcon : moonIcon;
+
+        // Update mobile browser status bar color
+        const themeColor = currentTheme === 'dark' ? '#000000' : '#ffffff';
+        const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+        if (themeColorMeta) {
+          themeColorMeta.setAttribute('content', themeColor);
+        }
+
+        // Update Apple mobile web app status bar style
+        const appleStatusBarMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+        if (appleStatusBarMeta) {
+          appleStatusBarMeta.setAttribute('content', currentTheme === 'dark' ? 'black-translucent' : 'default');
+        }
       }
 
       function updateLang() {
