@@ -82,7 +82,7 @@
       header {
         position: relative;
         text-align: center;
-        padding: 8rem 1rem;
+        padding: 5rem 2rem 4rem;
         background: hsl(var(--card));
       }
       footer {
@@ -95,9 +95,17 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 1rem;
+        padding: 3rem 1rem 4rem;
         background: hsl(var(--background));
         text-align: center;
+      }
+      .terminal-hint {
+        font-family: 'Courier New', monospace;
+        font-size: 0.75rem;
+        color: hsl(var(--muted-foreground));
+        opacity: 0.5;
+        margin-bottom: 0.75rem;
+        letter-spacing: 0.03em;
       }
       h1 {
         font-size: 2.5rem;
@@ -194,6 +202,103 @@
         direction: ltr;
         unicode-bidi: embed;
       }
+
+      /* ── Terminal Widget ──────────────────────────── */
+      .terminal {
+        width: 100%;
+        max-width: 650px;
+        margin: 2rem 0;
+        border-radius: var(--radius);
+        border: 1px solid hsl(var(--border));
+        overflow: hidden;
+        text-align: left;
+        direction: ltr;
+        font-family: 'Courier New', monospace;
+        font-size: 0.875rem;
+        cursor: text;
+      }
+      .terminal-header {
+        background: hsl(var(--muted));
+        padding: 0.6rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        border-bottom: 1px solid hsl(var(--border));
+      }
+      .terminal-dots {
+        display: flex;
+        gap: 0.375rem;
+      }
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      .dot.red    { background: #ff5f57; }
+      .dot.yellow { background: #febc2e; }
+      .dot.green  { background: #28c840; }
+      .terminal-title {
+        color: hsl(var(--muted-foreground));
+        font-size: 0.75rem;
+        font-family: 'Courier New', monospace;
+      }
+      .terminal-body {
+        background: hsl(var(--card));
+        padding: 1rem;
+        min-height: 180px;
+        max-height: 380px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 0.1rem;
+      }
+      .t-line {
+        line-height: 1.6;
+        white-space: pre;
+        color: hsl(var(--muted-foreground));
+      }
+      .t-line.cmd {
+        color: hsl(var(--foreground));
+      }
+      .t-line.cmd::before {
+        content: '❯ ';
+        color: hsl(var(--primary));
+      }
+      .t-line.t-bright { color: hsl(var(--foreground)); font-weight: 600; }
+      .t-line.t-sep    { color: hsl(var(--border)); }
+      .t-line.t-dim    { color: hsl(var(--muted-foreground)); opacity: 0.55; }
+      .t-green         { color: #4ade80; }
+      [data-theme='light'] .t-green { color: #16a34a; }
+      .t-label         { color: hsl(var(--muted-foreground)); }
+      .terminal-input-row {
+        background: hsl(var(--card));
+        border-top: 1px solid hsl(var(--border));
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .t-prompt {
+        color: hsl(var(--primary));
+        user-select: none;
+        font-family: 'Courier New', monospace;
+      }
+      #terminal-input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: hsl(var(--foreground));
+        font-family: 'Courier New', monospace;
+        font-size: 0.875rem;
+        caret-color: hsl(var(--foreground));
+        direction: ltr;
+      }
+      #terminal-input::placeholder {
+        color: hsl(var(--muted-foreground));
+        opacity: 0.5;
+      }
     </style>
     <!-- Highlight.js styles & script -->
     <link id="hljs-style" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css" />
@@ -206,13 +311,29 @@
     <header>
       <button id="theme-toggle" class="toggle-btn" aria-label="Toggle theme"></button>
       <button id="lang-toggle" class="lang-btn" aria-label="Toggle language"></button>
-    </header>
-    <main>
       <h1 id="heading">Hello, I'm Saud Alhelali</h1>
       <p id="subtitle" class="subtitle">A tech enthusiast passionate about Web Development, AI, and Football. Welcome to my minimal corner of the internet.</p>
       <div class="contact-buttons">
         <a class="btn" href="mailto:saudalhilali@gmail.com">Email</a>
         <a class="btn" href="https://www.linkedin.com/in/alhelali" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </header>
+    <main>
+      <p class="terminal-hint" id="terminal-hint">// try the terminal</p>
+      <div class="terminal" id="terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+          </div>
+          <span class="terminal-title">saud@alhelali.net ~ %</span>
+        </div>
+        <div class="terminal-body" id="terminal-body"></div>
+        <div class="terminal-input-row">
+          <span class="t-prompt">❯</span>
+          <input type="text" id="terminal-input" autocomplete="off" spellcheck="false" placeholder="type 'help'" />
+        </div>
       </div>
     </main>
     <!-- <main>
@@ -242,11 +363,13 @@
           heading: "Hello, I'm Saud Alhelali",
           subtitle: 'A tech enthusiast. Welcome to my minimal corner of the internet 👋🏼',
           langLabel: 'AR',
+          terminalHint: '// try the terminal',
         },
         ar: {
           heading: 'مرحبًا، أنا سعود الهلالي',
           subtitle: 'شغوف بالتقنية. نورت ركني البسيط على الإنترنت 👋🏼',
           langLabel: 'EN',
+          terminalHint: '// try the terminal',
         },
       };
 
@@ -282,6 +405,7 @@
         langToggle.textContent = translations[currentLang].langLabel;
         headingEl.textContent = translations[currentLang].heading;
         subtitleEl.textContent = translations[currentLang].subtitle;
+        document.getElementById('terminal-hint').textContent = translations[currentLang].terminalHint;
         htmlEl.setAttribute('lang', currentLang);
         htmlEl.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
       }
@@ -311,5 +435,293 @@
       //   hljs.highlightElement(codeOutput);
       // });
     </script>
+  <script>
+    // ── Interactive Terminal ─────────────────────────
+    (function () {
+      const body   = document.getElementById('terminal-body');
+      const input  = document.getElementById('terminal-input');
+      const term   = document.getElementById('terminal');
+
+      const history = [];
+      let historyIndex = -1;
+      let busy = false;
+
+      const cmds = {
+        en: {
+          help: [
+            'available commands:',
+            '',
+            '  about      who I am',
+            '  skills     my tech stack',
+            '  projects   things I\'ve built',
+            '  contact    get in touch',
+            '  now        what I\'m currently up to',
+            '  clear      clear the terminal',
+            '',
+            'tip: use ↑ ↓ to cycle through history.',
+          ],
+          about: [
+            'Saud Alhelali',
+            '─────────────────────────',
+            'Tech enthusiast based in Saudi Arabia.',
+            'Passionate about Web Development, AI, and Football.',
+            '',
+            'I love building things for the web, tinkering',
+            'with Linux setups, and exploring what\'s new.',
+          ],
+          skills: [
+            'tech stack',
+            '─────────────────────────',
+            'Languages   TypeScript · JavaScript · Python',
+            'Frontend    React · Next.js · HTML/CSS',
+            'Backend     Node.js · Express',
+            'Tools       Git · Linux · Docker',
+            'Exploring   AI agents & agentic coding',
+          ],
+          projects: [
+            'projects',
+            '─────────────────────────',
+            '→  alhelali.net    this site',
+            '',
+            'more coming soon.',
+            'github.com/alhilali',
+          ],
+          contact: [
+            'get in touch',
+            '─────────────────────────',
+            '→  email      saudalhilali@gmail.com',
+            '→  linkedin   linkedin.com/in/alhelali',
+            '→  github     github.com/alhilali',
+          ],
+          now: [
+            'what I\'m up to  /now',
+            '─────────────────────────',
+            'Learning Claude Code and building AI-powered tools.',
+            'Exploring the agentic coding workflow.',
+            '',
+            'updated: february 2026',
+          ],
+        },
+        ar: {
+          help: [
+            'الأوامر المتاحة:',
+            '',
+            '  about      من أنا',
+            '  skills     مهاراتي التقنية',
+            '  projects   مشاريعي',
+            '  contact    تواصل معي',
+            '  now        ماذا أفعل الآن',
+            '  clear      مسح الشاشة',
+            '',
+            'نصيحة: استخدم ↑ ↓ للتنقل بين الأوامر السابقة.',
+          ],
+          about: [
+            'سعود الهلالي',
+            '────────────────────',
+            'مهتم بالتقنية، من المملكة العربية السعودية.',
+            'شغوف بتطوير الويب، الذكاء الاصطناعي، وكرة القدم.',
+            '',
+            'أحب بناء مشاريع الويب والتجربة مع Linux.',
+          ],
+          skills: [
+            'المهارات التقنية',
+            '────────────────────',
+            'اللغات      TypeScript · JavaScript · Python',
+            'الواجهة     React · Next.js · HTML/CSS',
+            'الخادم      Node.js · Express',
+            'الأدوات     Git · Linux · Docker',
+            'أستكشف      وكلاء الذكاء الاصطناعي',
+          ],
+          projects: [
+            'المشاريع',
+            '────────────────────',
+            '→  alhelali.net    هذا الموقع',
+            '',
+            'المزيد قادم.',
+            'github.com/alhilali',
+          ],
+          contact: [
+            'تواصل معي',
+            '────────────────────',
+            '→  البريد     saudalhilali@gmail.com',
+            '→  LinkedIn   linkedin.com/in/alhelali',
+            '→  GitHub     github.com/alhilali',
+          ],
+          now: [
+            'ماذا أفعل الآن  /now',
+            '────────────────────',
+            'أتعلم Claude Code وأبني أدوات مدعومة بالذكاء الاصطناعي.',
+            'أستكشف تجربة البرمجة بمساعدة الوكلاء.',
+            '',
+            'آخر تحديث: فبراير 2026',
+          ],
+        },
+      };
+
+      function getLang() {
+        return document.documentElement.getAttribute('lang') === 'ar' ? 'ar' : 'en';
+      }
+
+      function esc(s) {
+        return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+
+      function addLine(text, cls, isHeader) {
+        const div = document.createElement('div');
+
+        // Command echo — plain
+        if (cls === 'cmd') {
+          div.className = 't-line cmd';
+          div.textContent = text;
+          body.appendChild(div);
+          body.scrollTop = body.scrollHeight;
+          return div;
+        }
+
+        div.className = 't-line';
+
+        if (/^─{3,}$/.test(text.trim())) {
+          // Separator line
+          div.classList.add('t-sep');
+          div.textContent = text;
+        } else if (isHeader && text) {
+          // Title / section header
+          div.classList.add('t-bright');
+          div.textContent = text;
+        } else if (text.startsWith('→')) {
+          // Arrow item: color arrow, keep rest normal
+          div.innerHTML = '<span class="t-green">→</span>' + esc(text.slice(1));
+        } else if (/^ {2}\S/.test(text)) {
+          // Indented help item: "  about      who I am"
+          const m = text.match(/^( {2})(\S+)( +)(.*)$/);
+          if (m) {
+            div.innerHTML = esc(m[1]) +
+              '<span class="t-green">' + esc(m[2]) + '</span>' +
+              esc(m[3]) +
+              '<span class="t-label">' + esc(m[4]) + '</span>';
+          } else {
+            div.textContent = text;
+          }
+        } else if (/^\S.{0,14}\s{3,}\S/.test(text)) {
+          // Key-value: "Languages   TypeScript..."
+          const m = text.match(/^(.+?)\s{3,}(.+)$/);
+          if (m) {
+            div.innerHTML = '<span class="t-label">' + esc(m[1]) + '</span>' + esc(text.slice(m[1].length));
+          } else {
+            div.textContent = text;
+          }
+        } else if (/^(tip:|نصيحة:|updated:|آخر تحديث:)/i.test(text)) {
+          // Tip / meta lines — extra dim
+          div.classList.add('t-dim');
+          div.textContent = text;
+        } else {
+          div.textContent = text;
+        }
+
+        body.appendChild(div);
+        body.scrollTop = body.scrollHeight;
+        return div;
+      }
+
+      function printLines(lines, delay = 45) {
+        return new Promise(resolve => {
+          let i = 0;
+          let headerDone = false;
+          function next() {
+            if (i >= lines.length) { resolve(); return; }
+            const text = lines[i];
+            const isHeader = !headerDone && text !== '';
+            if (text !== '') headerDone = true;
+            addLine(text, null, isHeader);
+            i++;
+            setTimeout(next, delay);
+          }
+          next();
+        });
+      }
+
+      async function runCommand(raw) {
+        const cmd = raw.trim().toLowerCase();
+        if (!cmd) return;
+
+        history.unshift(raw.trim());
+        historyIndex = -1;
+
+        addLine(raw.trim(), 'cmd');
+
+        if (cmd === 'clear') {
+          body.innerHTML = '';
+          return;
+        }
+
+        busy = true;
+        input.disabled = true;
+
+        const lang = getLang();
+        const dict = cmds[lang];
+
+        if (dict[cmd]) {
+          await printLines(dict[cmd]);
+        } else {
+          const msg = lang === 'ar'
+            ? [`أمر غير موجود: ${raw.trim()}`, 'اكتب "help" لرؤية الأوامر المتاحة.']
+            : [`command not found: ${raw.trim()}`, 'type "help" to see available commands.'];
+          await printLines(msg);
+        }
+
+        addLine('');
+        busy = false;
+        input.disabled = false;
+        input.focus();
+      }
+
+      // Welcome message
+      async function initTerminal() {
+        body.innerHTML = '';
+        const lang = getLang();
+        const welcome = lang === 'ar'
+          ? ['مرحبًا في محطة سعود ↗', 'اكتب "help" للبدء.', '']
+          : ['welcome to saud\'s terminal ↗', 'type "help" to get started.', ''];
+        await printLines(welcome, 60);
+      }
+
+      initTerminal();
+
+      // Re-initialize when language changes
+      new MutationObserver(initTerminal).observe(
+        document.documentElement,
+        { attributes: true, attributeFilter: ['lang'] }
+      );
+
+      // Keyboard handling
+      input.addEventListener('keydown', async (e) => {
+        if (e.key === 'Enter' && !busy) {
+          const val = input.value;
+          input.value = '';
+          await runCommand(val);
+        }
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (historyIndex < history.length - 1) {
+            historyIndex++;
+            input.value = history[historyIndex];
+          }
+        }
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (historyIndex > 0) {
+            historyIndex--;
+            input.value = history[historyIndex];
+          } else {
+            historyIndex = -1;
+            input.value = '';
+          }
+        }
+      });
+
+      // Click anywhere on terminal to focus input
+      term.addEventListener('click', () => input.focus());
+    })();
+  </script>
   </body>
 </html>
